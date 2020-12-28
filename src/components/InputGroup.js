@@ -4,8 +4,8 @@ import styled from 'styled-components/macro';
 const StyledInputGroup = styled.div`
   margin-top: ${props => props.mt && props.mt};
   margin-right: ${props => props.mr && props.mr};
-  margin-bottom: ${props => props.mb && props.mb};
   margin-left: ${props => props.ml && props.ml};
+  margin-bottom: ${props => props.mb ? props.mb : '1rem'};
 
   label {
     display: inline-block;
