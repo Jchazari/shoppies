@@ -13,10 +13,9 @@ export const GlobalStyle = createGlobalStyle`
     font-family: 'Poppins', sans-serif;
     font-size: 16px;
     color: #ffffff;
-    background-color: #111215;
+    background-color: #0e0e10;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     overscroll-behavior: none;
-    padding-bottom: 50px;
   }
 `;
