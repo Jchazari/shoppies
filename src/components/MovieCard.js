@@ -1,11 +1,14 @@
 import React from 'react'
-import styled, { css } from 'styled-components';
+import styled from 'styled-components';
 import poster from '../assets/joker-poster.jpeg';
 
 const StyledMovieCard = styled.div`
   position: relative;
-  width: ${props => props.nominated ? '180px' : '100%'};
-  height: 270px;
+  width: 100%;
+  height: 0;
+  padding-top: 150%;
+  margin-top: ${props => props.mt};
+  margin-bottom: ${props => props.mb};
   border-radius: 5px;
   background-color: #1c1d21;
   overflow: hidden;
@@ -14,6 +17,8 @@ const StyledMovieCard = styled.div`
 
 const ImgWrapper = styled.div`
   display: flex;
+  position: absolute;
+  top: 0;
   width: 100%;
   height: 100%;
 `;
@@ -28,7 +33,7 @@ const Details = styled.div`
   top: 0;
   width: 100%;
   padding: 8px;
-  background-color: rgba(32, 35, 43, 0.9);
+  background-color: rgba(31, 31, 35, 0.9);
   box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
 `;
 
@@ -45,11 +50,11 @@ const MovieYear = styled.p`
   color: #888888;
 `;
 
-function MovieCard({ movie }) {
+function MovieCard({ movie, ...props }) {
   const {Title, Year, Poster} = movie;
 
   return (
-    <StyledMovieCard>
+    <StyledMovieCard {...props}>
       <ImgWrapper>
         <Img src={Poster} alt={Title}/>
       </ImgWrapper>
@@ -63,10 +68,10 @@ function MovieCard({ movie }) {
 
 MovieCard.defaultProps = {
   movie: {
-    "Title": "Joker",
+    "Title": "The Shoppies",
     "Year": "2019",
-    "Poster": poster,
-  },
+    "Poster": poster
+  }
 };
 
 export default MovieCard;
