@@ -7,7 +7,7 @@ const Header = styled.div`
   align-items: center;
   justify-content: center;
   width: 100%;
-  min-height: 300px;
+  min-height: 325px;
   padding: 0 16px;
   text-align: center;
 
@@ -24,7 +24,7 @@ const Header = styled.div`
   }
 
   @media (max-width: 640px) {
-    min-height: 275px;
+    min-height: 300px;
     
     h1 {
       font-size: 2.5rem;
