@@ -1,14 +1,13 @@
-import React from 'react'
 import styled from 'styled-components';
-import Col from './Col';
 
-const StyledSkeleton = styled.div`
+const Skeleton = styled.div`
   width: 100%;
-  height: 280px;
+  height: 0;
+  padding-top: 150%;
   border-radius: 5px;
-  background: linear-gradient(-90deg, #f1f1f1 0%, #e4e4e4 50%, #f1f1f1 100%);
-  background-size: 300% 300%;
-  animation: pulse 1.2s ease-in-out infinite;
+  background: linear-gradient(-90deg, #15171b 0%, #191c21 50%, #15171b 100%);
+  background-size: 350% 450%;
+  animation: pulse 1s ease-in-out infinite;
 
   @keyframes pulse {
     0% {
@@ -19,13 +18,5 @@ const StyledSkeleton = styled.div`
     }
   }
 `;
-
-function Skeleton() {
-  return (
-    <Col>
-      <StyledSkeleton />
-    </Col>
-  );
-}
 
 export default Skeleton;
