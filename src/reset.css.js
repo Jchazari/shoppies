@@ -8,14 +8,14 @@ export const GlobalStyle = createGlobalStyle`
     box-sizing: border-box;
     appearance: none;
   }
+  
   body {
     font-family: 'Poppins', sans-serif;
     font-size: 16px;
-    color: #333;
-    background-color: #f8f8f8;
+    color: #ffffff;
+    background-color: #0e0e10;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     overscroll-behavior: none;
-    padding-bottom: 30px;
   }
 `;
