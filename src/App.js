@@ -21,12 +21,11 @@ const Section = styled.section`
 
 function App() {
   const [movies, setMovies] = useState([]);
-  const [search, setSearch] = useState('');
+  const [nominatedMovies, setNominatedMovies] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
-  const searchTerm = useDebounce(search, 500);
-
-  const [nominatedMovies, setNominatedMovies] = useState([]);
+  const [value, setValue] = useState('');
+  const search = useDebounce(value, 500);
 
   useEffect(() => {
     async function onSearch() {
@@ -34,7 +33,7 @@ function App() {
       setIsLoading(true);
 
       try {
-        const movies = await fetchMovies(searchTerm);
+        const movies = await fetchMovies(search);
         setMovies(movies);
       } catch (e) {
         setIsError(true);
@@ -43,15 +42,15 @@ function App() {
       }
     }
 
-    if (searchTerm) {
+    if (search) {
       onSearch();
     } else {
       cleanup();
     }
-  }, [searchTerm]);
+  }, [search]);
 
-  async function fetchMovies(searchTerm) {
-    const res = await fetch(`${BASE_URL}&s=${searchTerm}&type=movie`);
+  async function fetchMovies(search) {
+    const res = await fetch(`${BASE_URL}&s=${search}&type=movie`);
     const data = await res.json();
   
     if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
@@ -111,8 +110,8 @@ function App() {
               placeholder="Search for a movie by title"
               id="movie-searcher"
               autoComplete="off"
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
+              value={value}
+              onChange={(e) => setValue(e.target.value)}
             />
           </InputGroup>
           <Grid>
