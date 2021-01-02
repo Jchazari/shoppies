@@ -28,6 +28,11 @@ function App() {
   const search = useDebounce(value, 500);
 
   useEffect(() => {
+    if (!search) {
+      cleanup();
+      return;
+    }
+    
     async function onSearch() {
       cleanup();
       setIsLoading(true);
@@ -42,11 +47,7 @@ function App() {
       }
     }
 
-    if (search) {
-      onSearch();
-    } else {
-      cleanup();
-    }
+    onSearch();
   }, [search]);
 
   async function fetchMovies(search) {
