@@ -78,7 +78,11 @@ function App() {
   }
 
   function renderSkeletons() {
-    return [...Array(6)].map((s, i) => <Skeleton key={i} />);
+    return (
+      <Grid>
+        {[...Array(6)].map((s, i) => <Skeleton key={i} />)}
+      </Grid>
+    );
   }
 
   return (
@@ -114,13 +118,13 @@ function App() {
               onChange={(e) => setValue(e.target.value)}
             />
           </InputGroup>
-          <Grid>
-            {isLoading ? (
-              renderSkeletons()
-            ) : isError ? (
-              <p>No Results 😔</p>
-            ) : (
-              movies.map(movie => (
+          {isLoading ? (
+            renderSkeletons()
+          ) : isError ? (
+            <p>No results for: {search}</p>
+          ) : (
+            <Grid>
+              {movies.map(movie => (
                 <div key={movie.imdbID}>
                   <MovieCard movie={movie} mb="5px" />
                   <Button
@@ -131,9 +135,9 @@ function App() {
                     Nominate
                   </Button>
                 </div>
-              ))
-            )}
-          </Grid>
+              ))}
+            </Grid>
+          )}
         </Container>
       </Section>
     </div>
