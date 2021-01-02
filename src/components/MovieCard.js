@@ -1,6 +1,5 @@
 import React from 'react'
 import styled from 'styled-components';
-import poster from '../assets/joker-poster.jpeg';
 
 const StyledMovieCard = styled.div`
   position: relative;
@@ -70,7 +69,7 @@ MovieCard.defaultProps = {
   movie: {
     "Title": "The Shoppies",
     "Year": "2019",
-    "Poster": poster
+    "Poster": "Shoppies Poster"
   }
 };
 
