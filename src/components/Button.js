@@ -31,9 +31,6 @@ const StyledButton = styled.button`
     color: #2f3546;
     background-color: #20232b;
     cursor: not-allowed;
-    svg {
-      display: none;
-    }
   }
 `;
 
