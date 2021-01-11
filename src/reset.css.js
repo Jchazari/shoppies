@@ -7,6 +7,11 @@ const GlobalStyle = createGlobalStyle`
     outline: 0;
     box-sizing: border-box;
     appearance: none;
+    text-decoration: none;
+  }
+
+  html {
+    scroll-behavior: smooth;
   }
   
   body {
@@ -17,6 +22,7 @@ const GlobalStyle = createGlobalStyle`
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     overscroll-behavior: none;
+    overflow: ${props => props.noScroll && 'hidden'}
   }
 `;
 
