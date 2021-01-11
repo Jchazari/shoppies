@@ -2,15 +2,17 @@ import styled, { css } from 'styled-components';
 
 const FixedGridStyles = css`
   grid-template-columns: repeat(100, 180px);
-  padding: 0 16px;
-  padding-bottom: 12px;
   overflow: auto;
   scroll-behavior: smooth;
+  padding-bottom: 4px;
 
-  &:after {
-    content: '';
-    box-sizing: border-box;
-    width: 1px;
+  @media (max-width: 1200px) {
+    padding-left: 16px;
+    &:after {
+      content: '';
+      box-sizing: border-box;
+      width: 1px;
+    }
   }
 
   &::-webkit-scrollbar {
