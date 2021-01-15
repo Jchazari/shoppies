@@ -68,9 +68,9 @@ function Welcome({ inputRef }) {
           <Content>
             <Title>Welcome!</Title>
             <p>
-              The Shoppies gives you the power to choose the movies
-              that you feel should be up for nomination! Search thousands
-              of movies, and nominate the ones you love!
+              Here you will pick your top 5 favorite films that you
+              feel should be up for nomination and be at the upcoming Shoppies!
+              Search thousands of movies, and pick the ones you love!
             </p>
             <CTAButton
               size="lg"

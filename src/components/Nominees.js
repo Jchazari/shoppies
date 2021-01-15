@@ -9,6 +9,8 @@ import MovieCard from './MovieCard';
 import { Button } from './Button';
 
 const MoviesContainer = styled.div`
+  display: flex;
+  justify-content: center;
   width: 100%;
   overflow-x: hidden;
   overscroll-behavior-x: contain;
