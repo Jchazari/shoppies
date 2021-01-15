@@ -38,7 +38,7 @@ const Grid = styled.div`
 
   &.nominated-movies {
     grid-gap: 1rem;
-    grid-template-columns: repeat(100, 180px);
+    grid-template-columns: repeat(5, 180px);
     overflow: auto;
     scroll-behavior: smooth;
     padding-bottom: 4px;
@@ -49,14 +49,14 @@ const Grid = styled.div`
 
     @media (max-width: 1200px) {
       padding-left: 16px;
-
-      &:after {
-        content: '';
-        box-sizing: border-box;
-        width: 1px;
-      }
     }
   }
 `;
+
+// &:after {
+//   content: '';
+//   box-sizing: border-box;
+//   width: 1px;
+// }
 
 export default Grid;
