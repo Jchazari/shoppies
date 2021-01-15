@@ -5,13 +5,11 @@ import Grid from './Grid';
 import MovieCard from './MovieCard';
 import { Button } from './Button';
 
-const Wrapper = styled.div``;
-
 function MovieResults({ movies, nominateMovie, isNominated }) {
   return (
     <Grid className="movie-search-results">
       {movies.map(movie => (
-        <Wrapper key={movie.imdbID}>
+        <div key={movie.imdbID}>
           <MovieCard movie={movie} mb="5px" />
           <Button
             onClick={() => nominateMovie(movie)}
@@ -20,7 +18,7 @@ function MovieResults({ movies, nominateMovie, isNominated }) {
           >
             Nominate
           </Button>
-        </Wrapper>
+        </div>
       ))}
     </Grid>
   );
