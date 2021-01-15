@@ -6,7 +6,7 @@ import Section from './Section';
 import Container from './Container';
 import Grid from './Grid';
 import MovieCard from './MovieCard';
-import Button from './Button';
+import { Button } from './Button';
 
 const MoviesContainer = styled.div`
   width: 100%;

@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import Grid from './Grid';
 import MovieCard from './MovieCard';
-import Button from './Button';
+import { Button } from './Button';
 
 const Wrapper = styled.div``;
 

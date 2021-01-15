@@ -6,7 +6,7 @@ import bg from '../assets/bg.svg';
 import Section from './Section';
 import Container from './Container';
 import Grid from './Grid';
-import Button from './Button';
+import { CTAButton } from './Button';
 
 const Content = styled.div`
   @media (max-width: 830px) {
@@ -72,14 +72,13 @@ function Welcome({ inputRef }) {
               that you feel should be up for nomination! Search thousands
               of movies, and nominate the ones you love!
             </p>
-            <Button
-              variant="cta"
+            <CTAButton
               size="lg"
               mt="32px"
               onClick={() => inputRef.current.focus()}
             >
               Start searching
-            </Button>
+            </CTAButton>
           </Content>
           <VisualBrowserSvg />
         </Grid>
