@@ -8,11 +8,6 @@ const Nav = styled.nav`
   padding: 16px 0;
   background-color: #0e0e10;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
-  z-index: 999;
-
-  @media (max-width: 640px) {
-    padding: 12px 0;
-  }
 `;
 
 function Navbar() {
