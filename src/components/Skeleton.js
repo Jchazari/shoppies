@@ -1,6 +1,8 @@
+import PropTypes from 'prop-types';
 import styled from 'styled-components';
+import Grid from './Grid';
 
-const Skeleton = styled.div`
+const SkeletonCard = styled.div`
   width: 100%;
   height: 0;
   padding-top: 150%;
@@ -18,5 +20,21 @@ const Skeleton = styled.div`
     }
   }
 `;
+
+function Skeleton({ qty }) {
+  return (
+    <Grid className="movie-search-results">
+      {[...Array(qty)].map((s, i) => <SkeletonCard key={i} />)}
+    </Grid>
+  );
+}
+
+Skeleton.propTypes = {
+  qty: PropTypes.number,
+};
+
+Skeleton.defaultProps = {
+  qty: 1,
+};
 
 export default Skeleton;

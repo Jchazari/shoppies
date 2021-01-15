@@ -1,22 +1,18 @@
 import React from 'react'
-import styled from 'styled-components/macro';
+import PropTypes from 'prop-types';
+import styled from 'styled-components';
 import { ReactComponent as Icon } from '../assets/trophy.svg';
+import Section from './Section';
 import Container from './Container';
 import Grid from './Grid';
-
-const Section = styled.section`
-  position: relative;
-  width: 100%;
-  min-height: 400px;
-  padding: 16px 0;
-  background-color: #111215;
-  box-shadow: 0 0 8px rgba(0, 0, 0, 0.5);
-`;
+import MovieCard from './MovieCard';
+import { Button } from './Button';
 
 const MoviesContainer = styled.div`
   width: 100%;
   overflow-x: hidden;
   overscroll-behavior-x: contain;
+  
   @media (max-width: 1200px) {
     position: absolute;
     left: 0;
@@ -32,7 +28,7 @@ const Placeholder = styled.div`
   color: #373746;
 `;
 
-const Header = styled.div`
+const TitleWrapper = styled.div`
   display: flex;
   align-items: center;
   margin-bottom: 16px;
@@ -40,31 +36,38 @@ const Header = styled.div`
 
 const Trophy = styled(Icon)`
   width: 32px;
-  fill: #fed130;
+  fill: #ffff00;
 `;
 
 const Title = styled.h2`
-  font-size: 1.25rem;
+  font-size: 20px;
   font-weight: 500;
   margin-left: 8px;
 `;
 
-function Nominees({ children }) {
+function Nominees({ nominatedMovies, unNominateMovie }) {
   return (
-    <Section>
+    <Section className="nominees-section">
       <Container>
-        <Header>
+        <TitleWrapper>
           <Trophy />
           <Title>Your Nominations</Title>
-        </Header>
-        {children.length === 0 ? (
+        </TitleWrapper>
+        {nominatedMovies.length === 0 ? (
           <Placeholder>
             <p>Begin by searching for a movie!</p>
           </Placeholder>
         ) : (
           <MoviesContainer>
-            <Grid fixed>
-              {children}
+            <Grid className="nominated-movies">
+              {nominatedMovies.map(movie => (
+                <div key={movie.imdbID}>
+                  <MovieCard movie={movie} mb="5px" />
+                  <Button full onClick={() => unNominateMovie(movie)}>
+                    Remove
+                  </Button>
+                </div>
+              ))}
             </Grid>
           </MoviesContainer>
         )}
@@ -72,5 +75,10 @@ function Nominees({ children }) {
     </Section>
   );
 }
+
+Nominees.propTypes = {
+  nominatedMovies: PropTypes.array.isRequired,
+  unNominateMovie: PropTypes.func.isRequired,
+};
 
 export default Nominees;

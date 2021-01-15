@@ -1,7 +1,8 @@
 import React from 'react'
+import PropTypes from 'prop-types';
 import styled from 'styled-components';
 
-const StyledMovieCard = styled.div`
+const Card = styled.div`
   position: relative;
   width: 100%;
   height: 0;
@@ -53,7 +54,7 @@ function MovieCard({ movie, ...props }) {
   const {Title, Year, Poster} = movie;
 
   return (
-    <StyledMovieCard {...props}>
+    <Card {...props}>
       <ImgWrapper>
         <Img src={Poster} alt={Title}/>
       </ImgWrapper>
@@ -61,15 +62,19 @@ function MovieCard({ movie, ...props }) {
         <MovieTitle title={Title}>{Title}</MovieTitle>
         <MovieYear>{Year}</MovieYear>
       </Details>
-    </StyledMovieCard>
+    </Card>
   );
 }
+
+MovieCard.propTypes = {
+  movie: PropTypes.object.isRequired,
+};
 
 MovieCard.defaultProps = {
   movie: {
     "Title": "The Shoppies",
-    "Year": "2019",
-    "Poster": "Shoppies Poster"
+    "Year": "2021",
+    "Poster": "Shoppies Poster",
   }
 };
 
