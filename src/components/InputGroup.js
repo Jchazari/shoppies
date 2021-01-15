@@ -1,26 +1,22 @@
-import React from 'react'
-import styled from 'styled-components/macro';
+import PropTypes from 'prop-types';
+import styled from 'styled-components';
 
-const StyledInputGroup = styled.div`
+const InputGroup = styled.div`
   margin-top: ${props => (props.mt)};
   margin-right: ${props => (props.mr)};
   margin-left: ${props => (props.ml)};
-  margin-bottom: ${props => (props.mb ? props.mb : '1rem')};
-
-  label {
-    display: inline-block;
-    font-size: 1.25rem;
-    font-weight: 500;
-    margin-bottom: 0.5rem;
-  }
+  margin-bottom: ${props => (props.mb)};
 `;
 
-function InputGroup({ children, ...props }) {
-  return (
-    <StyledInputGroup {...props}>
-      {children}
-    </StyledInputGroup>
-  );
-}
+InputGroup.propTypes = {
+  mt: PropTypes.string,
+  mr: PropTypes.string,
+  mb: PropTypes.string,
+  ml: PropTypes.string,
+};
+
+InputGroup.defaultProps = {
+  mb: "16px",
+};
 
 export default InputGroup;
