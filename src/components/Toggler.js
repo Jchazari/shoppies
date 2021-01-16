@@ -1,0 +1,48 @@
+import styled from 'styled-components';
+import { ReactComponent as Icon } from '../assets/trophy.svg';
+
+const StyledToggler = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: fixed;
+  right: 16px;
+  bottom: 16px;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background-color: #232731;
+  box-shadow: 0 2px 4px 1px rgba(0, 0, 0, 0.4);
+  z-index: 999;
+  user-select: none;
+  cursor: pointer;
+`;
+
+const Counter = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  top: -3px;
+  right: -3px;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: red;
+`;
+
+const Trophy = styled(Icon)`
+  width: 40px;
+  fill: #ffff00;
+`;
+
+function Toggler({ nominationCount, ...props }) {
+  return (
+    <StyledToggler {...props}>
+      <Counter>{nominationCount}</Counter>
+      <Trophy />
+    </StyledToggler>
+  );
+}
+
+export default Toggler;
