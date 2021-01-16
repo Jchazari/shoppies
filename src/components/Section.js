@@ -4,20 +4,10 @@ const Section = styled.section`
   width: 100%;
 
   &.welcome-section {
+    display: flex;
+    align-items: center;
+    height: calc(100vh - 75.75px);
     position: relative;
-    padding: 100px 0;
-
-    @media (max-width: 830px) {
-      padding: 60px 0;
-    }
-  }
-
-  &.nominees-section {
-    position: relative;
-    min-height: 400px;
-    padding: 16px 0;
-    background-color: #111215;
-    box-shadow: 0 0 8px rgba(0, 0, 0, 0.5);
   }
 
   &.search-section {
