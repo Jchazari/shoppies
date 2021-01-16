@@ -6,6 +6,7 @@ import useFetchMovies from './hooks/useFetchMovies';
 import Navbar from './components/Navbar';
 import Welcome from './components/Welcome';
 import Nominees from './components/Nominees';
+import Toggler from './components/Toggler';
 import MovieResults from './components/MovieResults';
 import Section from './components/Section';
 import Container from './components/Container';
@@ -13,7 +14,6 @@ import Skeleton from './components/Skeleton';
 import InputGroup from './components/InputGroup';
 import Input from './components/Input';
 import Label from './components/Label';
-import Toggler from './components/Toggler';
 
 function App() {
   const inputRef = useRef();
@@ -21,15 +21,25 @@ function App() {
   const search = useDebounce(value, 500);
   const { movies, isLoading, isError } = useFetchMovies(cleanString(search));
   const [nominatedMovies, setNominatedMovies] = useState([]);
-  const [nominationCount, setNominationCount] = useState(null);
-  const [nomineesVisible, setNomineesVisible] = useState(false);
+  const [isToggled, setIsToggled] = useState(false);
+  const [isFinished, setIsFinished] = useState(false);
 
   useEffect(() => {
-    setNominationCount(nominatedMovies.length);
+    if (nominatedMovies.length === 5) {
+      setIsFinished(true);
+      setIsToggled(true);
+    } else {
+      setIsFinished(false);
+    }
   }, [nominatedMovies]);
 
   function nominateMovie(movie) {
-    setNominatedMovies([...nominatedMovies, movie]);
+    if (!isFinished) {
+      setNominatedMovies([...nominatedMovies, movie]);
+      return;
+    }
+
+    alert("You already completed nominating 5 movies!");
   }
 
   function unNominateMovie(movie) {
@@ -44,50 +54,47 @@ function App() {
   return (
     <Fragment>
       <GlobalStyle />
-      <Navbar />
-      <Welcome inputRef={inputRef} />
-      <Section className="search-section">
-        <Container>
-          <InputGroup>
-            <Label htmlFor="searcher" size="20px">
-              Movie Search
-            </Label>
-            <Input
-              ref={inputRef}
-              type="text"
-              placeholder="Search for a movie by title"
-              id="searcher"
-              autoComplete="off"
-              value={value}
-              onChange={(e) => setValue(e.target.value)}
-            />
-          </InputGroup>
-          {isLoading ? (
-            <Skeleton qty={6} />
-          ) : isError ? (
-            <p>No results for: {search}</p>
-          ) : (
-            <MovieResults
-              movies={movies}
-              nominateMovie={nominateMovie}
-              isNominated={isNominated}
-            />
-          )}
-        </Container>
-      </Section>
-      <Nominees
-        nominatedMovies={nominatedMovies}
-        unNominateMovie={unNominateMovie}
-        nomineesVisible={nomineesVisible}
-        setNomineesVisible={setNomineesVisible}
-      />
-      <Toggler
-        nominationCount={nominationCount}
-        unNominateMovie={unNominateMovie}
-        onClick={() => (
-          setNomineesVisible(!nomineesVisible)
-        )}
-      />
+        <Navbar />
+        <Welcome inputRef={inputRef} />
+        <Section className="search-section">
+          <Container>
+            <InputGroup>
+              <Label htmlFor="searcher" size="20px">
+                Movie Search
+              </Label>
+              <Input
+                ref={inputRef}
+                type="text"
+                placeholder="Search for a movie by title"
+                id="searcher"
+                autoComplete="off"
+                value={value}
+                onChange={(e) => setValue(e.target.value)}
+              />
+            </InputGroup>
+            {isLoading ? (
+              <Skeleton qty={6} />
+            ) : isError ? (
+              <p>No results for: {search}</p>
+            ) : (
+              <MovieResults
+                movies={movies}
+                nominateMovie={nominateMovie}
+                isNominated={isNominated}
+              />
+            )}
+          </Container>
+        </Section>
+        <Nominees
+          isFinished={isFinished}
+          nominatedMovies={nominatedMovies}
+          unNominateMovie={unNominateMovie}
+          toggledState={{isToggled, setIsToggled}}
+        />
+        <Toggler
+          count={nominatedMovies.length}
+          onClick={() => setIsToggled(!isToggled)}
+        />
     </Fragment>
   );
 }

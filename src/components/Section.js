@@ -11,7 +11,7 @@ const Section = styled.section`
   }
 
   &.search-section {
-    min-height: 100vh;
+    min-height: calc(50vh + 75.75px);
     padding: 16px 0;
   }
 `;
