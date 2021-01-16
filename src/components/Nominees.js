@@ -1,86 +1,116 @@
 import React from 'react'
-import PropTypes from 'prop-types';
-import styled from 'styled-components';
-import { ReactComponent as Icon } from '../assets/trophy.svg';
-import Section from './Section';
-import Container from './Container';
+import styled, { css } from 'styled-components';
 import Grid from './Grid';
 import MovieCard from './MovieCard';
 import { Button } from './Button';
+import { ReactComponent as CloseIcon } from '../assets/close.svg';
 
 const MoviesContainer = styled.div`
-  display: flex;
-  justify-content: center;
   width: 100%;
   overflow-x: hidden;
   overscroll-behavior-x: contain;
-  
-  @media (max-width: 1200px) {
-    position: absolute;
-    left: 0;
+`;
+
+const StyledNominees = styled.div`
+  position: fixed;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  width: 1020px;
+  height: 425px;
+  margin: 0 auto;
+  padding: 24px;
+  border-radius: 10px 10px 0 0;
+  background-color: #15161b;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+  visibility: hidden;
+  transform: translateY(450px);
+  transition: transform 0.2s;
+  ${props => (props.visible && (
+    css`
+      visibility: visible;
+      transform: translateY(0);
+    `
+  ))}
+
+  @media (max-width: 1036px) {
+    width: 100%;
+
+    ${MoviesContainer} {
+      position: absolute;
+      left: 0;
+    }
+
+    ${Grid} {
+      grid-template-columns: repeat(6, 180px);
+      overflow: auto;
+      scroll-behavior: smooth;
+      padding-left: 24px;
+
+      &::after {
+        content: "";
+        box-sizing: border-box;
+        width: 8px;
+      }
+    }
   }
-`;
-
-const Placeholder = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-  height: 276px;
-  color: #373746;
-`;
-
-const TitleWrapper = styled.div`
-  display: flex;
-  align-items: center;
-  margin-bottom: 16px;
-`;
-
-const Trophy = styled(Icon)`
-  width: 32px;
-  fill: #ffff00;
 `;
 
 const Title = styled.h2`
   font-size: 20px;
   font-weight: 500;
-  margin-left: 8px;
+  margin-bottom: 16px;
 `;
 
-function Nominees({ nominatedMovies, unNominateMovie }) {
+const CloseButton = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  width: 35px;
+  height: 35px;
+  border-radius: 50%;
+  padding: 10px;
+  background-color: #20222b;
+  transition: background-color 0.2s;
+  user-select: none;
+  cursor: pointer;
+
+  &:hover {
+    background-color: #262935;
+  }
+`;
+
+const Icon = styled(CloseIcon)`
+  width: 100%;
+  height: auto;
+  fill: #cad8ff;
+`;
+
+function Nominees({ nominatedMovies, unNominateMovie, nomineesVisible, setNomineesVisible }) {
   return (
-    <Section className="nominees-section">
-      <Container>
-        <TitleWrapper>
-          <Trophy />
-          <Title>Your Nominations</Title>
-        </TitleWrapper>
-        {nominatedMovies.length === 0 ? (
-          <Placeholder>
-            <p>Begin by searching for a movie!</p>
-          </Placeholder>
-        ) : (
-          <MoviesContainer>
-            <Grid className="nominated-movies">
-              {nominatedMovies.map(movie => (
-                <div key={movie.imdbID}>
-                  <MovieCard movie={movie} mb="5px" />
-                  <Button full onClick={() => unNominateMovie(movie)}>
-                    Remove
-                  </Button>
-                </div>
-              ))}
-            </Grid>
-          </MoviesContainer>
-        )}
-      </Container>
-    </Section>
+    <StyledNominees visible={nomineesVisible}>
+      <CloseButton onClick={() => setNomineesVisible(false)}>
+        <Icon />
+      </CloseButton>
+      <Title>Your Nominations</Title>
+      <MoviesContainer>
+        <Grid className="nominated-movies">
+          {nominatedMovies.map(movie => (
+            <div key={movie.imdbID}>
+              <MovieCard movie={movie} mb="5px" />
+              <Button full onClick={() => unNominateMovie(movie)}>
+                Remove
+              </Button>
+            </div>
+          ))}
+        </Grid>
+      </MoviesContainer>
+    </StyledNominees>
   );
 }
-
-Nominees.propTypes = {
-  nominatedMovies: PropTypes.array.isRequired,
-  unNominateMovie: PropTypes.func.isRequired,
-};
 
 export default Nominees;
