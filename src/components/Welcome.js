@@ -9,11 +9,14 @@ import Grid from './Grid';
 import { CTAButton } from './Button';
 
 const Content = styled.div`
+  padding-bottom: 48px;
+
   @media (max-width: 830px) {
     display: flex;
     flex-direction: column;
     align-items: center;
     text-align: center;
+    padding-bottom: 0;
   }
 `;
 
