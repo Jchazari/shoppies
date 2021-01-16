@@ -1,4 +1,4 @@
-import React, { useState, useRef, Fragment } from 'react';
+import React, { useState, useEffect, useRef, Fragment } from 'react';
 import GlobalStyle from './reset.css';
 import cleanString from './utils/cleanString';
 import useDebounce from './hooks/useDebounce';
@@ -13,21 +13,28 @@ import Skeleton from './components/Skeleton';
 import InputGroup from './components/InputGroup';
 import Input from './components/Input';
 import Label from './components/Label';
+import Toggler from './components/Toggler';
 
 function App() {
+  const inputRef = useRef();
   const [value, setValue] = useState('');
   const search = useDebounce(value, 500);
   const { movies, isLoading, isError } = useFetchMovies(cleanString(search));
   const [nominatedMovies, setNominatedMovies] = useState([]);
-  const inputRef = useRef();
+  const [nominationCount, setNominationCount] = useState(null);
+  const [nomineesVisible, setNomineesVisible] = useState(false);
+
+  useEffect(() => {
+    setNominationCount(nominatedMovies.length);
+  }, [nominatedMovies]);
 
   function nominateMovie(movie) {
     setNominatedMovies([...nominatedMovies, movie]);
   }
 
   function unNominateMovie(movie) {
-    const nominatedMoviesCopy = nominatedMovies.filter(mov => mov !== movie);
-    setNominatedMovies(nominatedMoviesCopy);
+    const filteredNM = nominatedMovies.filter(mov => mov !== movie);
+    setNominatedMovies(filteredNM);
   }
 
   function isNominated(movie) {
@@ -39,10 +46,6 @@ function App() {
       <GlobalStyle />
       <Navbar />
       <Welcome inputRef={inputRef} />
-      <Nominees
-        nominatedMovies={nominatedMovies}
-        unNominateMovie={unNominateMovie}
-      />
       <Section className="search-section">
         <Container>
           <InputGroup>
@@ -72,6 +75,19 @@ function App() {
           )}
         </Container>
       </Section>
+      <Nominees
+        nominatedMovies={nominatedMovies}
+        unNominateMovie={unNominateMovie}
+        nomineesVisible={nomineesVisible}
+        setNomineesVisible={setNomineesVisible}
+      />
+      <Toggler
+        nominationCount={nominationCount}
+        unNominateMovie={unNominateMovie}
+        onClick={() => (
+          setNomineesVisible(!nomineesVisible)
+        )}
+      />
     </Fragment>
   );
 }
