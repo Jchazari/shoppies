@@ -9,7 +9,7 @@ const Grid = styled.div`
     grid-template-columns: 55% auto;
     place-items: center;
 
-    @media (max-width: 830px) {
+    @media (max-width: 950px) {
       grid-template-columns: 1fr;
     }
   }

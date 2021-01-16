@@ -11,7 +11,7 @@ import { CTAButton } from './Button';
 const Content = styled.div`
   padding-bottom: 48px;
 
-  @media (max-width: 830px) {
+  @media (max-width: 950px) {
     display: flex;
     flex-direction: column;
     align-items: center;

@@ -23,6 +23,13 @@ function App() {
   const [nominatedMovies, setNominatedMovies] = useState([]);
   const [nominationCount, setNominationCount] = useState(null);
   const [nomineesVisible, setNomineesVisible] = useState(false);
+  const [bannerVisible, setBannerVisible] = useState(false);
+
+  useEffect(() => {
+    if (nominatedMovies.length === 5) {
+      setBannerVisible(true);
+    }
+  }, [nominatedMovies]);
 
   useEffect(() => {
     setNominationCount(nominatedMovies.length);
