@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import Grid from './Grid';
+import { MoviesGrid } from './MovieResults';
 
 const SkeletonCard = styled.div`
   width: 100%;
@@ -23,9 +23,9 @@ const SkeletonCard = styled.div`
 
 function Skeleton({ qty }) {
   return (
-    <Grid className="movie-search-results">
+    <MoviesGrid>
       {[...Array(qty)].map((s, i) => <SkeletonCard key={i} />)}
-    </Grid>
+    </MoviesGrid>
   );
 }
 
