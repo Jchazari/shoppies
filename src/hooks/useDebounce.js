@@ -9,6 +9,8 @@ function useDebounce(value, delay) {
     }, delay);
 
     return () => clearTimeout(handler);
+    
+  // eslint-disable-next-line
   }, [value]);
 
   return debouncedValue;
