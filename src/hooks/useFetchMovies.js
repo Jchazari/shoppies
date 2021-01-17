@@ -5,48 +5,47 @@ function useFetchMovies(search) {
   const cache = useRef({});
   const url = `${BASE_URL}&s=${search}&type=movie`
   const [movies, setMovies] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
-  const [isError, setIsError] = useState(false);
+  const [status, setStatus] = useState('idle');
 
   useEffect(() => {
     if (!search) {
-      setInitialStates();
+      setMovies([]);
+      setStatus('idle');
       return;
     }
 
     async function fetchMovies() {
-      setInitialStates();
-      setIsLoading(true);
+      setMovies([]);
+      setStatus('loading');
 
       if (cache.current[url]) {
         setMovies(cache.current[url]);
+        setStatus('success');
       } else {
         try {
           const response = await fetch(url);
           if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
   
           const data = await response.json();
-          if (data.Error) setIsError(true);
+          if (data.Error) {
+            setStatus('error');
+            return;
+          }
           
           cache.current[url] = data.Search;
+
           setMovies(data.Search);
+          setStatus('success');
         } catch (error) {
           alert(error.message);
         }
       }
-
-      setIsLoading(false);
     }
 
     fetchMovies();
   }, [search]);
 
-  function setInitialStates() {
-    setMovies([]);
-    setIsError(false);
-  }
-
-  return { movies, isLoading, isError };
+  return { movies, status };
 }
 
 export default useFetchMovies;
