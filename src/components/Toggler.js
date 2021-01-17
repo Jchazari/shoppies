@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { ReactComponent as Check } from '../assets/check.svg';
 import { ReactComponent as Trophy } from '../assets/trophy.svg';
@@ -59,6 +60,14 @@ function Toggler({ count, ...props }) {
       <TrophyIcon />
     </TogglerButton>
   );
+}
+
+Toggler.propTypes = {
+  count: PropTypes.number,
+}
+
+Toggler.defaultProps = {
+  count: 0,
 }
 
 export default Toggler;
