@@ -1,19 +1,19 @@
 import React from 'react'
 import styled, { css } from 'styled-components';
-import { ReactComponent as Close } from '../assets/close.svg';
 import Banner from './Banner';
-import Grid from './Grid';
 import MovieCard from './MovieCard';
+import CloseButton from './CloseButton';
 import { Button } from './Button';
 
-const Placeholder = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-  padding-top: 135px;
-  color: #2c3044;
-  user-select: none;
+const MoviesGrid = styled.div`
+  display: grid;
+  grid-gap: 16px;
+  grid-template-columns: repeat(5, 180px);
+  padding: 4px;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
 `;
 
 export const MoviesContainer = styled.div`
@@ -24,8 +24,8 @@ export const MoviesContainer = styled.div`
 
 const StyledNominees = styled.div`
   position: fixed;
-  right: 0;
   bottom: 0;
+  right: 0;
   left: 0;
   width: 1020px;
   min-height: 417px;
@@ -38,6 +38,7 @@ const StyledNominees = styled.div`
   visibility: hidden;
   transform: translateY(100vh);
   transition: transform 0.2s, visibility 0.2s;
+  
   ${props => (props.isToggled && (
     css`
       visibility: visible;
@@ -54,7 +55,7 @@ const StyledNominees = styled.div`
       left: 0;
     }
 
-    ${Grid} {
+    ${MoviesGrid} {
       grid-template-columns: repeat(6, 180px);
       overflow: auto;
       scroll-behavior: smooth;
@@ -69,48 +70,28 @@ const StyledNominees = styled.div`
   }
 `;
 
+const Placeholder = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  padding-top: 135px;
+  color: #2c3044;
+  user-select: none;
+`;
+
 const Title = styled.h2`
   font-size: 20px;
   font-weight: 500;
   margin-bottom: 16px;
 `;
 
-const CloseButton = styled.button`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  position: absolute;
-  top: 8px;
-  right: 8px;
-  width: 35px;
-  height: 35px;
-  border: none;
-  border-radius: 50%;
-  padding: 10px;
-  background-color: #20222b;
-  color: #ffffff;
-  transition: background-color 0.2s;
-  user-select: none;
-  cursor: pointer;
-
-  &:hover {
-    background-color: #262935;
-  }
-`;
-
-const CloseIcon = styled(Close)`
-  width: 100%;
-  height: auto;
-  fill: #cad8ff;
-`;
-
 function Nominees({ nominatedMovies, unNominateMovie, toggledState, isFinished }) {
   const {isToggled, setIsToggled} = toggledState;
+
   return (
     <StyledNominees isToggled={isToggled} isFinished={isFinished}>
-      <CloseButton onClick={() => setIsToggled(false)}>
-        <CloseIcon />
-      </CloseButton>
+      <CloseButton onClick={() => setIsToggled(false)} />
       {isFinished && <Banner />}
       <Title>Your Nominations</Title>
       {nominatedMovies.length === 0 ? (
@@ -119,7 +100,7 @@ function Nominees({ nominatedMovies, unNominateMovie, toggledState, isFinished }
         </Placeholder>
       ) : (
         <MoviesContainer>
-          <Grid className="nominated-movies">
+          <MoviesGrid>
             {nominatedMovies.map(movie => (
               <div key={movie.imdbID}>
                 <MovieCard movie={movie} mb="5px" />
@@ -128,7 +109,7 @@ function Nominees({ nominatedMovies, unNominateMovie, toggledState, isFinished }
                 </Button>
               </div>
             ))}
-          </Grid>
+          </MoviesGrid>
         </MoviesContainer>
       )}
     </StyledNominees>
