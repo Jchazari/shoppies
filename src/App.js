@@ -40,6 +40,15 @@ function App() {
   const [isFinished, setIsFinished] = useState(false);
 
   useEffect(() => {
+    const data = localStorage.getItem('nominated-movies');
+    if (data) setNominatedMovies(JSON.parse(data));
+  }, []);
+
+  useEffect(() => {
+    localStorage.setItem('nominated-movies', JSON.stringify(nominatedMovies))
+  });
+
+  useEffect(() => {
     if (nominatedMovies.length === 5) {
       setIsFinished(true);
       setIsToggled(true);
