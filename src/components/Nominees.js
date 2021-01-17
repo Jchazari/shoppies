@@ -1,9 +1,22 @@
-import React from 'react'
-import styled, { css } from 'styled-components';
+import React, { useState, useEffect } from 'react';
+import PropTypes from 'prop-types';
+import styled from 'styled-components';
 import Banner from './Banner';
 import MovieCard from './MovieCard';
 import CloseButton from './CloseButton';
 import { Button } from './Button';
+
+const WindowOverlay = styled.div`
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background-color: rgba(14, 14, 16, 0.5);
+  opacity: ${props => (props.transitionIn ? '1' : '0')};
+  transition: opacity 0.2s;
+  z-index: 1000;
+`;
 
 const MoviesGrid = styled.div`
   display: grid;
@@ -22,7 +35,7 @@ export const MoviesContainer = styled.div`
   overscroll-behavior-x: contain;
 `;
 
-const StyledNominees = styled.div`
+const NomineesBox = styled.div`
   position: fixed;
   bottom: 0;
   right: 0;
@@ -34,17 +47,8 @@ const StyledNominees = styled.div`
   border-radius: 10px 10px 0 0;
   background-color: #15161b;
   box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
-  z-index: 1000;
-  visibility: hidden;
-  transform: translateY(100vh);
-  transition: transform 0.2s, visibility 0.2s;
-  
-  ${props => (props.isToggled && (
-    css`
-      visibility: visible;
-      transform: translateY(0);
-    `
-  ))}
+  transform: ${props => (props.transitionIn ? 'translateY(0)' : 'translateY(100vh)')};
+  transition: transform 0.2s;
 
   @media (max-width: 1036px) {
     width: 100%;
@@ -86,34 +90,55 @@ const Title = styled.h2`
   margin-bottom: 16px;
 `;
 
-function Nominees({ nominatedMovies, unNominateMovie, toggledState, isFinished }) {
-  const {isToggled, setIsToggled} = toggledState;
+function Nominees({ nominatedMovies, unNominateMovie, setIsToggled, isFinished }) {
+  const [transitionIn, setTransitionIn] = useState(false);
+
+  useEffect(() => {
+    setTransitionIn(true);
+  }, []);
+
+  function handleClick() {
+    setTransitionIn(false);
+
+    const timerId = setTimeout(() => setIsToggled(false), 150);
+
+    return () => timerId && clearTimeout(timerId);
+  }
 
   return (
-    <StyledNominees isToggled={isToggled} isFinished={isFinished}>
-      <CloseButton onClick={() => setIsToggled(false)} />
-      {isFinished && <Banner />}
-      <Title>Your Nominations</Title>
-      {nominatedMovies.length === 0 ? (
-        <Placeholder>
-          <p>You haven't nominated any movies yet!</p>
-        </Placeholder>
-      ) : (
-        <MoviesContainer>
-          <MoviesGrid>
-            {nominatedMovies.map(movie => (
-              <div key={movie.imdbID}>
-                <MovieCard movie={movie} mb="5px" />
-                <Button full onClick={() => unNominateMovie(movie)}>
-                  Remove
-                </Button>
-              </div>
-            ))}
-          </MoviesGrid>
-        </MoviesContainer>
-      )}
-    </StyledNominees>
+    <WindowOverlay transitionIn={transitionIn}>
+      <NomineesBox isFinished={isFinished} transitionIn={transitionIn}>
+        <CloseButton onClick={() => handleClick()} />
+        {isFinished && <Banner />}
+        <Title>Your Nominations</Title>
+        {nominatedMovies.length === 0 ? (
+          <Placeholder>
+            <p>You haven't nominated any movies yet!</p>
+          </Placeholder>
+        ) : (
+          <MoviesContainer>
+            <MoviesGrid>
+              {nominatedMovies.map(movie => (
+                <div key={movie.imdbID}>
+                  <MovieCard movie={movie} mb="5px" />
+                  <Button full onClick={() => unNominateMovie(movie)}>
+                    Remove
+                  </Button>
+                </div>
+              ))}
+            </MoviesGrid>
+          </MoviesContainer>
+        )}
+      </NomineesBox>
+    </WindowOverlay>
   );
+}
+
+Nominees.propTypes = {
+  nominatedMovies: PropTypes.array.isRequired,
+  unNominateMovie: PropTypes.func.isRequired,
+  setIsToggled: PropTypes.func.isRequired,
+  isFinished: PropTypes.bool.isRequired,
 }
 
 export default Nominees;
