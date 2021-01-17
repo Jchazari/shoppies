@@ -8,9 +8,7 @@ function useDebounce(value, delay) {
       setDebouncedValue(value);
     }, delay);
 
-    return () => {
-      clearTimeout(handler);
-    };
+    return () => clearTimeout(handler);
   }, [value]);
 
   return debouncedValue;

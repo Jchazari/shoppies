@@ -22,6 +22,7 @@ const GlobalStyle = createGlobalStyle`
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     overscroll-behavior: none;
+    overflow: ${props => (props.noScroll && 'hidden')};
   }
 `;
 

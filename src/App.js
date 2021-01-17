@@ -1,25 +1,40 @@
 import React, { useState, useEffect, useRef, Fragment } from 'react';
+import styled from 'styled-components';
 import GlobalStyle from './reset.css';
-import cleanString from './utils/cleanString';
 import useDebounce from './hooks/useDebounce';
 import useFetchMovies from './hooks/useFetchMovies';
+import cleanString from './utils/cleanString';
+import Container from './components/Container';
 import Navbar from './components/Navbar';
 import Welcome from './components/Welcome';
-import Nominees from './components/Nominees';
-import Toggler from './components/Toggler';
 import MovieResults from './components/MovieResults';
-import Section from './components/Section';
-import Container from './components/Container';
 import Skeleton from './components/Skeleton';
-import InputGroup from './components/InputGroup';
+import Toggler from './components/Toggler';
+import Nominees from './components/Nominees';
 import Input from './components/Input';
-import Label from './components/Label';
+
+const MovieSearchSection = styled.section`
+  width: 100%;
+  min-height: calc(50vh + 75.75px);
+  padding: 16px 0;
+`;
+
+const SearchWrapper = styled.div`
+  margin-bottom: 16px;
+`;
+
+const Label = styled.label`
+  display: inline-block;
+  font-size: 20px;
+  font-weight: 500;
+  margin-bottom: 8px;
+`;
 
 function App() {
   const inputRef = useRef();
   const [value, setValue] = useState('');
   const search = useDebounce(value, 500);
-  const { movies, isLoading, isError } = useFetchMovies(cleanString(search));
+  const { movies, status } = useFetchMovies(cleanString(search));
   const [nominatedMovies, setNominatedMovies] = useState([]);
   const [isToggled, setIsToggled] = useState(false);
   const [isFinished, setIsFinished] = useState(false);
@@ -28,9 +43,9 @@ function App() {
     if (nominatedMovies.length === 5) {
       setIsFinished(true);
       setIsToggled(true);
-    } else {
-      setIsFinished(false);
+      return;
     }
+    setIsFinished(false);
   }, [nominatedMovies]);
 
   function nominateMovie(movie) {
@@ -39,7 +54,7 @@ function App() {
       return;
     }
 
-    alert("You already completed nominating 5 movies!");
+    alert("You already nominated 5 movies!");
   }
 
   function unNominateMovie(movie) {
@@ -51,50 +66,59 @@ function App() {
     return nominatedMovies.some(mov => mov.imdbID === movie.imdbID);
   }
 
+  function renderSearchContent() {
+    switch (status) {
+      case "loading":
+        return <Skeleton qty={6} />;
+      case "error":
+        return <p>No results for: {search}</p>;
+      case "success":
+        return (
+          <MovieResults
+            movies={movies}
+            nominateMovie={nominateMovie}
+            isNominated={isNominated}
+          />
+        );
+      default:
+        return null;
+    }
+  }
+
   return (
     <Fragment>
-      <GlobalStyle />
-        <Navbar />
-        <Welcome inputRef={inputRef} />
-        <Section className="search-section">
-          <Container>
-            <InputGroup>
-              <Label htmlFor="searcher" size="20px">
-                Movie Search
-              </Label>
-              <Input
-                ref={inputRef}
-                type="text"
-                placeholder="Search for a movie by title"
-                id="searcher"
-                autoComplete="off"
-                value={value}
-                onChange={(e) => setValue(e.target.value)}
-              />
-            </InputGroup>
-            {isLoading ? (
-              <Skeleton qty={6} />
-            ) : isError ? (
-              <p>No results for: {search}</p>
-            ) : (
-              <MovieResults
-                movies={movies}
-                nominateMovie={nominateMovie}
-                isNominated={isNominated}
-              />
-            )}
-          </Container>
-        </Section>
+      <GlobalStyle noScroll={isToggled} />
+      <Navbar />
+      <Welcome inputRef={inputRef} />
+      <MovieSearchSection>
+        <Container>
+          <SearchWrapper>
+            <Label htmlFor="searcher">Movie Search</Label>
+            <Input
+              ref={inputRef}
+              type="text"
+              placeholder="Search for a movie by title"
+              id="searcher"
+              autoComplete="off"
+              value={value}
+              onChange={(e) => setValue(e.target.value)}
+            />
+          </SearchWrapper>
+          {renderSearchContent()}
+        </Container>
+      </MovieSearchSection>
+      <Toggler
+        count={nominatedMovies.length}
+        onClick={() => setIsToggled(!isToggled)}
+      />
+      {isToggled && (
         <Nominees
-          isFinished={isFinished}
           nominatedMovies={nominatedMovies}
           unNominateMovie={unNominateMovie}
-          toggledState={{isToggled, setIsToggled}}
+          setIsToggled={setIsToggled}
+          isFinished={isFinished}
         />
-        <Toggler
-          count={nominatedMovies.length}
-          onClick={() => setIsToggled(!isToggled)}
-        />
+      )}
     </Fragment>
   );
 }

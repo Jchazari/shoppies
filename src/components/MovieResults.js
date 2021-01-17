@@ -1,13 +1,35 @@
 import React from 'react'
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import Grid from './Grid';
 import MovieCard from './MovieCard';
 import { Button } from './Button';
 
+export const MoviesGrid = styled.div`
+  width: 100%;
+  display: grid;
+  grid-gap: 16px;
+  grid-template-columns: repeat(6, 1fr);
+
+  @media (max-width: 1100px) {
+    grid-template-columns: repeat(5, 1fr);
+  }
+
+  @media (max-width: 950px) {
+    grid-template-columns: repeat(4, 1fr);
+  }
+
+  @media (max-width: 750px) {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  @media (max-width: 580px) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+`;
+
 function MovieResults({ movies, nominateMovie, isNominated }) {
   return (
-    <Grid className="movie-search-results">
+    <MoviesGrid>
       {movies.map(movie => (
         <div key={movie.imdbID}>
           <MovieCard movie={movie} mb="5px" />
@@ -20,7 +42,7 @@ function MovieResults({ movies, nominateMovie, isNominated }) {
           </Button>
         </div>
       ))}
-    </Grid>
+    </MoviesGrid>
   );
 }
 

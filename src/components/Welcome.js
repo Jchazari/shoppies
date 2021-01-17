@@ -1,26 +1,31 @@
 import React from 'react'
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import { ReactComponent as browser } from '../assets/browser.svg';
-import bg from '../assets/bg.svg';
-import Section from './Section';
 import Container from './Container';
-import Grid from './Grid';
+import bg from '../assets/bg.svg';
 import { CTAButton } from './Button';
+import { ReactComponent as Browser } from '../assets/browser.svg';
 
-const Content = styled.div`
-  padding-bottom: 48px;
+const VisualBrowser = styled(Browser)`
+  max-width: 500px;
+  width: 100%;
 
-  @media (max-width: 950px) {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-    padding-bottom: 0;
+  .card {
+    animation-duration: 2s;
+    animation-name: animateCard;
+    animation-iteration-count: infinite;
+    animation-direction: alternate;
   }
+
+  @keyframes animateCard {
+    from { transform: translateX(0) translateY(0); }
+    to { transform: translateX(20px) translateY(-20px); }
+  }
+
+  @media (max-width: 480px) { max-width: 325px; }
 `;
 
-const Illustrations = styled.div`
+const BackgroundArt = styled.div`
   position: absolute;
   top: 10px;
   background-image: url(${bg});
@@ -32,27 +37,35 @@ const Illustrations = styled.div`
   pointer-events: none;
 `;
 
-const VisualBrowserSvg = styled(browser)`
-  max-width: 500px;
+const Content = styled.div`
+  padding-bottom: 48px;
+`;
+
+const ContentGrid = styled.div`
+  display: grid;
+  grid-gap: 3rem;
+  grid-template-columns: 55% auto;
+  place-items: center;
+`;
+
+const WelcomeSection = styled.section`
+  display: flex;
+  align-items: center;
+  position: relative;
   width: 100%;
-  
-  @media (max-width: 480px) {
-    max-width: 325px;
-  }
+  height: calc(100vh - 75.75px);
 
-  .card {
-    animation-duration: 2s;
-    animation-name: animateCard;
-    animation-iteration-count: infinite;
-    animation-direction: alternate;
-  }
-
-  @keyframes animateCard {
-    from {
-      transform: translateX(0) translateY(0);
+  @media (max-width: 950px) {
+    ${ContentGrid} {
+      grid-template-columns: 1fr;
     }
-    to {
-      transform: translateX(20px) translateY(-20px);
+
+    ${Content} {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      padding-bottom: 0;
     }
   }
 `;
@@ -65,9 +78,9 @@ const Title = styled.h1`
 
 function Welcome({ inputRef }) {
   return (
-    <Section className="welcome-section">
+    <WelcomeSection>
       <Container>
-        <Grid className="welcome-content">
+        <ContentGrid>
           <Content>
             <Title>Welcome!</Title>
             <p>
@@ -83,11 +96,11 @@ function Welcome({ inputRef }) {
               Start searching
             </CTAButton>
           </Content>
-          <VisualBrowserSvg />
-        </Grid>
+          <VisualBrowser />
+        </ContentGrid>
       </Container>
-      <Illustrations />
-    </Section>
+      <BackgroundArt />
+    </WelcomeSection>
   );
 }
 

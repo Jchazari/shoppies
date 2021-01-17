@@ -1,19 +1,33 @@
-import React from 'react'
-import styled, { css } from 'styled-components';
-import { ReactComponent as Close } from '../assets/close.svg';
+import React, { useState, useEffect, useRef } from 'react';
+import PropTypes from 'prop-types';
+import styled from 'styled-components';
+import useOutsideClick from '../hooks/useOutsideClick';
 import Banner from './Banner';
-import Grid from './Grid';
 import MovieCard from './MovieCard';
+import CloseButton from './CloseButton';
 import { Button } from './Button';
 
-const Placeholder = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-  padding-top: 135px;
-  color: #2c3044;
-  user-select: none;
+const WindowOverlay = styled.div`
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background-color: rgba(14, 14, 16, 0.5);
+  opacity: ${props => (props.transitionIn ? '1' : '0')};
+  transition: opacity 0.2s;
+  z-index: 1000;
+`;
+
+const MoviesGrid = styled.div`
+  display: grid;
+  grid-gap: 16px;
+  grid-template-columns: repeat(5, 180px);
+  padding: 4px;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
 `;
 
 export const MoviesContainer = styled.div`
@@ -22,10 +36,10 @@ export const MoviesContainer = styled.div`
   overscroll-behavior-x: contain;
 `;
 
-const StyledNominees = styled.div`
+const NomineesBox = styled.div`
   position: fixed;
-  right: 0;
   bottom: 0;
+  right: 0;
   left: 0;
   width: 1020px;
   min-height: 417px;
@@ -34,16 +48,8 @@ const StyledNominees = styled.div`
   border-radius: 10px 10px 0 0;
   background-color: #15161b;
   box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
-  z-index: 1000;
-  visibility: hidden;
-  transform: translateY(100vh);
-  transition: transform 0.2s, visibility 0.2s;
-  ${props => (props.isToggled && (
-    css`
-      visibility: visible;
-      transform: translateY(0);
-    `
-  ))}
+  transform: ${props => (props.transitionIn ? 'translateY(0)' : 'translateY(100vh)')};
+  transition: transform 0.2s;
 
   @media (max-width: 1036px) {
     width: 100%;
@@ -54,7 +60,7 @@ const StyledNominees = styled.div`
       left: 0;
     }
 
-    ${Grid} {
+    ${MoviesGrid} {
       grid-template-columns: repeat(6, 180px);
       overflow: auto;
       scroll-behavior: smooth;
@@ -69,70 +75,74 @@ const StyledNominees = styled.div`
   }
 `;
 
+const Placeholder = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  padding-top: 135px;
+  color: #2c3044;
+  user-select: none;
+`;
+
 const Title = styled.h2`
   font-size: 20px;
   font-weight: 500;
   margin-bottom: 16px;
 `;
 
-const CloseButton = styled.button`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  position: absolute;
-  top: 8px;
-  right: 8px;
-  width: 35px;
-  height: 35px;
-  border: none;
-  border-radius: 50%;
-  padding: 10px;
-  background-color: #20222b;
-  color: #ffffff;
-  transition: background-color 0.2s;
-  user-select: none;
-  cursor: pointer;
+function Nominees({ nominatedMovies, unNominateMovie, setIsToggled, isFinished }) {
+  const ref = useRef();
+  const [transitionIn, setTransitionIn] = useState(false);
 
-  &:hover {
-    background-color: #262935;
+  useOutsideClick(ref, handleClick);
+
+  useEffect(() => {
+    setTransitionIn(true);
+  }, []);
+
+  function handleClick() {
+    setTransitionIn(false);
+
+    const handler = setTimeout(() => setIsToggled(false), 150);
+
+    return () => clearTimeout(handler);
   }
-`;
 
-const CloseIcon = styled(Close)`
-  width: 100%;
-  height: auto;
-  fill: #cad8ff;
-`;
-
-function Nominees({ nominatedMovies, unNominateMovie, toggledState, isFinished }) {
-  const {isToggled, setIsToggled} = toggledState;
   return (
-    <StyledNominees isToggled={isToggled} isFinished={isFinished}>
-      <CloseButton onClick={() => setIsToggled(false)}>
-        <CloseIcon />
-      </CloseButton>
-      {isFinished && <Banner />}
-      <Title>Your Nominations</Title>
-      {nominatedMovies.length === 0 ? (
-        <Placeholder>
-          <p>You haven't nominated any movies yet!</p>
-        </Placeholder>
-      ) : (
-        <MoviesContainer>
-          <Grid className="nominated-movies">
-            {nominatedMovies.map(movie => (
-              <div key={movie.imdbID}>
-                <MovieCard movie={movie} mb="5px" />
-                <Button full onClick={() => unNominateMovie(movie)}>
-                  Remove
-                </Button>
-              </div>
-            ))}
-          </Grid>
-        </MoviesContainer>
-      )}
-    </StyledNominees>
+    <WindowOverlay transitionIn={transitionIn}>
+      <NomineesBox ref={ref} isFinished={isFinished} transitionIn={transitionIn}>
+        <CloseButton onClick={() => handleClick()} />
+        {isFinished && <Banner />}
+        <Title>Your Nominations</Title>
+        {nominatedMovies.length === 0 ? (
+          <Placeholder>
+            <p>You haven't nominated any movies yet!</p>
+          </Placeholder>
+        ) : (
+          <MoviesContainer>
+            <MoviesGrid>
+              {nominatedMovies.map(movie => (
+                <div key={movie.imdbID}>
+                  <MovieCard movie={movie} mb="5px" />
+                  <Button full onClick={() => unNominateMovie(movie)}>
+                    Remove
+                  </Button>
+                </div>
+              ))}
+            </MoviesGrid>
+          </MoviesContainer>
+        )}
+      </NomineesBox>
+    </WindowOverlay>
   );
+}
+
+Nominees.propTypes = {
+  nominatedMovies: PropTypes.array.isRequired,
+  unNominateMovie: PropTypes.func.isRequired,
+  setIsToggled: PropTypes.func.isRequired,
+  isFinished: PropTypes.bool.isRequired,
 }
 
 export default Nominees;
