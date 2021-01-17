@@ -67,7 +67,7 @@ function MovieCard({ movie, ...props }) {
 }
 
 MovieCard.propTypes = {
-  movie: PropTypes.object.isRequired,
+  movie: PropTypes.object,
 };
 
 MovieCard.defaultProps = {
