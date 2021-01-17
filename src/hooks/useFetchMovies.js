@@ -43,6 +43,8 @@ function useFetchMovies(search) {
     }
 
     fetchMovies();
+    
+  // eslint-disable-next-line
   }, [search]);
 
   return { movies, status };
