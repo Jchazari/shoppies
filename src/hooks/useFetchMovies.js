@@ -1,9 +1,8 @@
 import { useState, useEffect, useRef } from 'react'
-import { BASE_URL } from '../constants';
 
 function useFetchMovies(search) {
   const cache = useRef({});
-  const url = `${BASE_URL}&s=${search}&type=movie`
+  const url = `http://www.omdbapi.com/?s=${search}&type=movie&apikey=${process.env.REACT_APP_OMDB_API_KEY}`;
   const [movies, setMovies] = useState([]);
   const [status, setStatus] = useState('idle');
 
