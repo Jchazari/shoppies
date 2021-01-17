@@ -37,6 +37,7 @@ function useFetchMovies(search) {
           setMovies(data.Search);
           setStatus('success');
         } catch (error) {
+          setStatus('idle');
           alert(error.message);
         }
       }
