@@ -1,3 +1,3 @@
 <div align="center">
-  ![The Shoppies](./public/reademe-banner.png)
+  ![The Shoppies](./public/readme-banner.png)
 </div>
