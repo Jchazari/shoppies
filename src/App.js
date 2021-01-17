@@ -113,7 +113,6 @@ function App() {
               onChange={(e) => setValue(e.target.value)}
             />
           </SearchWrapper>
-          <p>{process.env.REACT_APP_OMDB_API_KEY}</p>
           {renderSearchContent()}
         </Container>
       </MovieSearchSection>
