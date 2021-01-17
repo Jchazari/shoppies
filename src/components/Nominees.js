@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
+import useOutsideClick from '../hooks/useOutsideClick';
 import Banner from './Banner';
 import MovieCard from './MovieCard';
 import CloseButton from './CloseButton';
@@ -91,7 +92,10 @@ const Title = styled.h2`
 `;
 
 function Nominees({ nominatedMovies, unNominateMovie, setIsToggled, isFinished }) {
+  const ref = useRef();
   const [transitionIn, setTransitionIn] = useState(false);
+
+  useOutsideClick(ref, handleClick);
 
   useEffect(() => {
     setTransitionIn(true);
@@ -100,14 +104,14 @@ function Nominees({ nominatedMovies, unNominateMovie, setIsToggled, isFinished }
   function handleClick() {
     setTransitionIn(false);
 
-    const timerId = setTimeout(() => setIsToggled(false), 150);
+    const handler = setTimeout(() => setIsToggled(false), 150);
 
-    return () => timerId && clearTimeout(timerId);
+    return () => clearTimeout(handler);
   }
 
   return (
     <WindowOverlay transitionIn={transitionIn}>
-      <NomineesBox isFinished={isFinished} transitionIn={transitionIn}>
+      <NomineesBox ref={ref} isFinished={isFinished} transitionIn={transitionIn}>
         <CloseButton onClick={() => handleClick()} />
         {isFinished && <Banner />}
         <Title>Your Nominations</Title>
