@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from 'react'
 
 function useFetchMovies(search) {
   const cache = useRef({});
-  const url = `http://www.omdbapi.com/?s=${search}&type=movie&apikey=${process.env.REACT_APP_OMDB_API_KEY}`;
+  const url = `https://www.omdbapi.com/?s=${search}&type=movie&apikey=${process.env.REACT_APP_OMDB_API_KEY}`;
   const [movies, setMovies] = useState([]);
   const [status, setStatus] = useState('idle');
 
