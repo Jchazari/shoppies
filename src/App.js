@@ -45,7 +45,6 @@ function App() {
       setIsToggled(true);
       return;
     }
-
     setIsFinished(false);
   }, [nominatedMovies]);
 
@@ -88,7 +87,7 @@ function App() {
 
   return (
     <Fragment>
-      <GlobalStyle />
+      <GlobalStyle noScroll={isToggled} />
       <Navbar />
       <Welcome inputRef={inputRef} />
       <MovieSearchSection>
@@ -108,16 +107,18 @@ function App() {
           {renderSearchContent()}
         </Container>
       </MovieSearchSection>
-      <Nominees
-        isFinished={isFinished}
-        nominatedMovies={nominatedMovies}
-        unNominateMovie={unNominateMovie}
-        toggledState={{isToggled, setIsToggled}}
-      />
       <Toggler
         count={nominatedMovies.length}
         onClick={() => setIsToggled(!isToggled)}
       />
+      {isToggled && (
+        <Nominees
+          nominatedMovies={nominatedMovies}
+          unNominateMovie={unNominateMovie}
+          setIsToggled={setIsToggled}
+          isFinished={isFinished}
+        />
+      )}
     </Fragment>
   );
 }
