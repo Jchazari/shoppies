@@ -1,2 +1,3 @@
-# The Shoppies
-Nominate the movies to rule them all!
+<div align="center">
+  ![The Shoppies](./public/reademe-banner.png)
+</div>
