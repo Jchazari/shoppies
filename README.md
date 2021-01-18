@@ -1,5 +1,7 @@
 <img src="public/img/readme-banner.png" width="100%" />
 
+[![Netlify Status](https://api.netlify.com/api/v1/badges/8dc57caf-387f-4a73-88aa-3a027c109ddf/deploy-status)](https://theshoppies-2021-jc21.netlify.app/)
+
 ## The Shoppies: Movie awards for entrepreneurs
 
 The Shoppies is a part of Shopifys Web Developer Intern Challenge and their application process.
@@ -35,8 +37,12 @@ Install dependencies:
 npm install
 ```
 
-Acquire your own [OMDb API key](http://www.omdbapi.com/apikey.aspx) and head on over to `shoppies/src/constatns.js` and set `API_KEY` = to your api key.
-Once that is done, start err up!
+Make sure to acquire your own [OMDb API key](http://www.omdbapi.com/apikey.aspx).
+
+Once you acquire your api key head on over to `src/utils/constants.js`. There you will replace `${process.env...}` with your api key.
+
+Start up the development server and you're good to go!
+
 ```sh
 npm start
 ```
