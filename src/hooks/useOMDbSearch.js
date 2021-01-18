@@ -1,8 +1,9 @@
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useRef } from 'react';
+import { BASE_URL } from '../utils/constants';
 
-function useFetchMovies(search) {
+function useOMDbSearch(search) {
   const cache = useRef({});
-  const url = `https://www.omdbapi.com/?s=${search}&type=movie&apikey=${process.env.REACT_APP_OMDB_API_KEY}`;
+  const url = `${BASE_URL}&s=${search}`;
   const [movies, setMovies] = useState([]);
   const [status, setStatus] = useState('idle');
 
@@ -50,4 +51,4 @@ function useFetchMovies(search) {
   return { movies, status };
 }
 
-export default useFetchMovies;
+export default useOMDbSearch;
