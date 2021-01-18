@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef, Fragment } from 'react';
 import styled from 'styled-components';
 import GlobalStyle from './reset.css';
 import useDebounce from './hooks/useDebounce';
-import useFetchMovies from './hooks/useFetchMovies';
+import useOMDbSearch from './hooks/useOMDbSearch';
 import cleanString from './utils/cleanString';
 import Container from './components/Container';
 import Navbar from './components/Navbar';
@@ -34,7 +34,7 @@ function App() {
   const inputRef = useRef();
   const [value, setValue] = useState('');
   const search = useDebounce(value, 500);
-  const { movies, status } = useFetchMovies(cleanString(search));
+  const { movies, status } = useOMDbSearch(cleanString(search));
   const [nominatedMovies, setNominatedMovies] = useState([]);
   const [isToggled, setIsToggled] = useState(false);
   const [isFinished, setIsFinished] = useState(false);
@@ -46,7 +46,7 @@ function App() {
 
   useEffect(() => {
     localStorage.setItem('nominated-movies', JSON.stringify(nominatedMovies))
-  });
+  }, [nominatedMovies]);
 
   useEffect(() => {
     if (nominatedMovies.length === 5) {
